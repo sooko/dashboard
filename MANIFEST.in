@@ -1,2 +1,2 @@
-include dial/fonts/*.ttf
+include dial/fonts/hemi.ttf
 include dial/assets/*.png

@@ -9,4 +9,5 @@ setup(name='dial',
       license='MIT',
       packages=['dial'],
       zip_safe=False,
+      package_data={'dial': ['fonts/hemi.ttf']},
       include_package_data=True)
