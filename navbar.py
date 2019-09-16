@@ -9,7 +9,7 @@ Builder.load_string('''
 
 <Navbar>:
     size_hint:1,None
-    height:"40sp"
+    height:"30sp"
     BtnImg:
         color:root.btn_menu_color
         source:"asset/3btn.png"    
@@ -23,7 +23,7 @@ Builder.load_string('''
             root.on_release_menu()
     Label
         text:root.app_name
-        font_size:self.height/2
+        font_size:self.height/1.5
         halign:"right"
         valign:"middle"
         text_size:self.size

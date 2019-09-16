@@ -4,14 +4,13 @@ class Chart(Graph):
     poin=ListProperty([])
     xlabel=StringProperty("")
     ylabel=StringProperty("")
-    x_ticks_minor=NumericProperty(5)
-    x_ticks_major=NumericProperty(0)
+    x_ticks_minor=NumericProperty(0)
+    x_ticks_major=NumericProperty(10)
     y_ticks_major=NumericProperty(10)
     y_ticks_minor=NumericProperty(2)
     y_grid_label=BooleanProperty(True)
     x_grid_label=BooleanProperty(False)
-    padding=NumericProperty(5)
-    x_grid=BooleanProperty(True)
+    x_grid=BooleanProperty(False)
     y_grid=BooleanProperty(True)
     xmin=NumericProperty(0)
     xmax=NumericProperty(50)
@@ -20,15 +19,20 @@ class Chart(Graph):
     label_options = DictProperty({'color': [0,1,1,1], 'bold':False})
     border_color = ListProperty([0,1,1,.1])
     tick_color = ListProperty([1,1,1,1])
-    plot = LinePlot(color=[1, 0, 0, 1],line_width=1.5)
-    plot.points = [(0,0)]
+    plot_pressure = LinePlot(color=[1, 0, 0, 1],line_width=1.5)
+    plot_batt = LinePlot(color=[1,1, 0, 1],line_width=1.5)
+    plot_pressure.points = [(0,0)]
+    plot_batt.points = [(0,0)]
     def __init__(self,*args,**kwargs):
         super(Chart,self).__init__(*args,**kwargs)
-        self.add_plot(self.plot)
-        self.plot.points=self.poin
-    def show_chart(self,x_value,y_value):
-        print("sho")
-
-
-
+        self.add_plot(self.plot_pressure)
+        self.add_plot(self.plot_batt)
+    def show_chart_pressure(self,x_value,y_value):
+        self.plot_pressure.points.append((x_value,y_value))
+        if x_value>50:
+            self.xmax+=1
+            self.xmin+=1
+            self.plot_pressure.points.remove(self.plot_pressure.points[0])
+    def show_chart_batt(self,x_value,y_value):
+        self.plot_batt.points.append((x_value, y_value))
 

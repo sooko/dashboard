@@ -13,15 +13,21 @@ Builder.load_string("""
 <Label>:
     font_name:"fonts/hemi.ttf"
 <DialTacho>:
-    Image:
-        pos_hint: {"center_x":0.5, "center_y":0.5}
-        source:"asset/rpm.png"
-        size_hint:1,1
-        color:root.warna
     FloatLayout:
         size_hint: None, None
         pos_hint: {"center_x":0.5, "center_y":0.5}
-        size: .95*min(root.size), .95*min(root.size)
+        size: 1*min(root.size), 1*min(root.size)
+        canvas:
+            Color:
+                rgba: root.warna
+            Ellipse:
+                size: self.size     
+                pos: self.pos
+                source:"asset/rpm.png"
+    FloatLayout:
+        size_hint: None, None
+        pos_hint: {"center_x":0.5, "center_y":0.5}
+        size: .96*min(root.size), .96*min(root.size)
         canvas:
             Color:
                 rgba: root.warna_alpa
@@ -47,7 +53,7 @@ Builder.load_string("""
     FloatLayout:
         size_hint: None, None
         pos_hint: {"center_x":0.5, "center_y":0.5}
-        size: .94*min(root.size), .94*min(root.size)
+        size: .96*min(root.size), .96*min(root.size)
         canvas:
             Color:
                 rgba: root.warna_alpa
@@ -96,11 +102,17 @@ Builder.load_string("""
             PopMatrix
    
 <DialPressure>:
-    Image:
+    FloatLayout:
+        size_hint: None, None
         pos_hint: {"center_x":0.5, "center_y":0.5}
-        source:"asset/psi.png"
-        size_hint:1,1
-        color:root.warna
+        size: 1*min(root.size), 1*min(root.size)
+        canvas:
+            Color:
+                rgba: root.warna
+            Ellipse:
+                size: self.size     
+                pos: self.pos
+                source:"asset/psi.png"
     FloatLayout:
         size_hint: None, None
         pos_hint: {"center_x":0.5, "center_y":0.5}
@@ -123,7 +135,7 @@ Builder.load_string("""
                 font_size:self.height/1.5
                 color:root.warna_name
             Label:
-                text:str(root.value)
+                text:"{:.1f}".format(root.value)
                 font_size:self.height*1.15
                 color:root.warna_value
             Label:
@@ -158,7 +170,7 @@ Builder.load_string("""
         size: .94*min(root.size), .94*min(root.size)
         canvas:
             Color:
-                rgba: 1,1,1,.1
+                rgba: 1,1,1,.07
             Ellipse:
                 size: self.size     
                 pos: self.pos
@@ -177,8 +189,11 @@ Builder.load_string("""
                 origin: self.center
         canvas.after:
             PopMatrix
-   
-
+    Button
+        pos_hint: {"center_x":0.5, "center_y":0.5}
+        size_hint:.5,.5
+        on_press:root.reset()
+        background_color:0,0,0,0
 <DialSpeed>:
     Image:
         source:"asset/speed.png"
@@ -368,6 +383,7 @@ class DialPressure(FloatLayout):
     warna_name= ListProperty([0, 1, 1, 1])
     warna_value= ListProperty([0, 1, 1, 1])
     warna_alpa=ListProperty([0, 1, 1,.3])
+    state=NumericProperty(0)
     def __init__(self, *args, **kwargs):
         super(DialPressure, self).__init__(*args, **kwargs)
         self.demo()
@@ -387,14 +403,16 @@ class DialPressure(FloatLayout):
         self.anim_max = Animation(anime_max_value=self.max_value, duration=2)
         self.anim.start(self)
         self.anim_max.start(self)
+        self.state=1
     def show_value(self,data):
-        self.value=data
-        if self.max_value<self.value:
-            self.max_value=self.value
-        self.anim = Animation(anime_value=self.value,duration=1,t="linear")
-        self.anim_max=Animation(anime_max_value=self.max_value,duration=1,t="linear")
-        self.anim.start(self)
-        self.anim_max.start(self)
+        if self.state==1:
+            self.value=data
+            if self.max_value<self.value:
+                self.max_value=self.value
+            self.anim = Animation(anime_value=self.value,duration=1,t="linear")
+            self.anim_max=Animation(anime_max_value=self.max_value,duration=1,t="linear")
+            self.anim.start(self)
+            self.anim_max.start(self)
     def reset(self):
         self.anime_value = 0
         self.anime_max_value=0
@@ -468,16 +486,5 @@ class PsiScreen(Screen):
     def __init__(self, *args, **kwargs):
         super(PsiScreen, self).__init__(*args, **kwargs)
         self.ids["flt"].add_widget(self.graph)
-
-
-
-
-
-
 class MyApp(App):
     sm=Sm()
-#     def build(self):
-#         self.sm.add_widget(PsiScreen())
-#         return self.sm
-# if __name__=="__main__":
-#     MyApp().run()
