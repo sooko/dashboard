@@ -384,6 +384,7 @@ class DialPressure(FloatLayout):
     warna_value= ListProperty([0, 1, 1, 1])
     warna_alpa=ListProperty([0, 1, 1,.3])
     state=NumericProperty(0)
+    last_value=NumericProperty(0)
     def __init__(self, *args, **kwargs):
         super(DialPressure, self).__init__(*args, **kwargs)
         self.demo()
@@ -406,7 +407,9 @@ class DialPressure(FloatLayout):
         self.state=1
     def show_value(self,data):
         if self.state==1:
+
             self.value=data
+            self.last_value=self.value
             if self.max_value<self.value:
                 self.max_value=self.value
             self.anim = Animation(anime_value=self.value,duration=1,t="linear")

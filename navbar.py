@@ -28,13 +28,28 @@ Builder.load_string('''
         valign:"middle"
         text_size:self.size
         color:root.app_name_color
-        
+    Label:
+        size_hint:None,1
+        width:"10sp"
+    BtnImg:
+        id:qrbtn
+        color:root.btn_menu_color
+        source:"asset/qr.png"    
+        size_hint:None,1
+        width:"20sp"
+        on_press:
+            self.color=0,1,1,.5
+            root.scanbtn+=1
+        on_release:
+            self.color=root.btn_menu_color
+            
         
 ''')
 class BtnImg(ButtonBehavior,Image):
 
     pass
 class NavBar(BoxLayout):
+    scanbtn=NumericProperty(0)
     menu_pressed=StringProperty("normal")
     menu_released=StringProperty("down")
     app_name = StringProperty("My Aplication")
@@ -49,3 +64,8 @@ class NavBar(BoxLayout):
     def on_release_menu(self):
         self.menu_released="down"
         self.menu_pressed = "normal"
+    def press(self,a,b):
+        print(a,b)
+    def on_scanbtn(self,a,b):
+        pass
+

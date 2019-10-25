@@ -9,7 +9,7 @@ from kivy.uix.behaviors import DragBehavior
 from kivy.core.audio import SoundLoader
 from kivy.uix.label import Label
 from kivy.uix.image import Image
-from chart import Chart
+from chart import ChartThrottle
 Builder.load_string('''
 <DragLabel>:
     drag_rectangle: self.x, self.y, self.width, self.height
@@ -82,7 +82,7 @@ Builder.load_string('''
                     Tabung1  
                         value:root.cyl4_value
                     Tabung:
-            Chart
+            ChartThrottle
                 pos_hint:{"center_x":.5,"center_y":.494}
                 id:chart
                 ymax:120
@@ -162,14 +162,15 @@ class ThrottlePage(FloatLayout):
     cyl4_value=NumericProperty(120)
     state=NumericProperty(0)
     clock=Clock
+    batt=NumericProperty(0)
     def __init__(self,*args,**kwargs):
         super(ThrottlePage,self).__init__(**kwargs)
         self.demo()
     def demo(self):
-        self.anim1 = Animation(cyl1_value=0, duration=1,t="out_bounce")
-        self.anim2 = Animation(cyl2_value=0, duration=1,t="out_bounce")
-        self.anim3 = Animation(cyl3_value=0, duration=1,t="out_bounce")
-        self.anim4 = Animation(cyl4_value=0, duration=1,t="out_bounce")
+        self.anim1 = Animation(cyl1_value=0, duration=1.5,t="out_bounce")
+        self.anim2 = Animation(cyl2_value=0, duration=1.5,t="out_bounce")
+        self.anim3 = Animation(cyl3_value=0, duration=1.5,t="out_bounce")
+        self.anim4 = Animation(cyl4_value=0, duration=1.5,t="out_bounce")
         self.anim1.start(self)
         self.anim2.start(self)
         self.anim3.start(self)
@@ -177,12 +178,13 @@ class ThrottlePage(FloatLayout):
         self.clock.schedule_once(self.delay,3)
     def delay(self,dt):
         self.state=1
-    def show_value(self,cyl1,cyl2,cyl3,cyl4):
+    def show_value(self,batt,cyl1,cyl2,cyl3,cyl4):
         if self.state==1:
+            self.batt=batt
             self.cyl1_value=cyl1
             self.cyl2_value=cyl2
             self.cyl3_value=cyl3
-            self.cyl14_value=cyl4
+            self.cyl4_value=cyl4
 
 
 
